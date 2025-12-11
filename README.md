@@ -41,10 +41,10 @@ These are the materials required for the current design of the stirring module w
 | [25mm x 25mm Square Fan](https://www.digikey.ca/en/products/detail/sunon-fans/MF25100V1-1000U-A99/7805269) | DigiKey | 259-1830-ND | 6 | 14.71 | 88.26 |
 | [Barrel Power Connector](https://www.digikey.ca/en/products/detail/same-sky-formerly-cui-devices/PJ-102AH/408448) | DigiKey | CP-102AH-ND | 1 | 1.14 | 1.14 |
 | [5V Barrel Power Supply](https://www.digikey.ca/en/products/detail/tri-mag-llc/L6R06H-050/7682614) | DigiKey | 364-1251-ND | 1 | 10.15 | 10.15 |
-| [NPN Transistor](https://www.digikey.ca/en/products/detail/nexperia-usa-inc/PZT2222A-115/1158011?s=N4IgTCBcDaIIwHYwILQBYwFYwrigBAHIAiIAugL5A) | DigiKey | 1727-4252-1-ND | 1 | 0.80 | 0.80 |
+| [MOSFET Transistor](https://www.digikey.ca/en/products/detail/infineon-technologies/IRLZ44NPBF/811808) | DigiKey | IRLZ44NPBF-ND | 1 | 1.78 | 0.80 |
 | [USB A to Micro B Cable](https://www.digikey.com/en/products/detail/cvilux-usa/DH-20M50056/13177301) | DigiKey | DH-20M50056 | 1 | 3.33 | 3.33 |
 | [50 V Diode](https://www.digikey.ca/en/products/detail/diotec-semiconductor/1N4001/13164614) | DigiKey |	4878-1N4001CT-ND | 1 | 0.15 | 0.15 |
-| Total Cost (CAD)| |  |  | | **119.95** |
+| Total Cost (CAD)| |  |  | | **120.93** |
 
 ### Materials Required - Kits
 These materials come in kits, so you may not need them if you already have similar materials. They can be used for other projects as well.
@@ -86,35 +86,39 @@ In this repo, you can find `.stl` which are 3D printing files for the casing of 
 ### Parts Required
 - PCB board from Kit (60x40 mm)
 - Wires 
-- 1x 1000 Ohm resistor
-- 1x 5.6 Ohm resistor
+- 1x 10K Ohm resistor
 - 1x 390 Ohm resistor
-- 1x NPN Transistor
+- 1x MOSFET Transistor
 - 1x 50V diode
 - 1x Power Barrel Connector
 - 2x Heat Shrink Connector
 
 ### Circuit Diagram
-![stirring_module_circuit](https://github.com/user-attachments/assets/ab85338e-2480-4929-9b23-1145f1889081)\
+<!-- ![stirring_module_circuit](https://github.com/user-attachments/assets/ab85338e-2480-4929-9b23-1145f1889081)\ -->
+<img width="380" height="340" alt="stirring_module_circuit_V2" src="https://github.com/user-attachments/assets/22baa312-0638-4ba0-9a8a-2955816212dc" />
+
 _(an image of the soldered PCB is attached below)_
 
 ### Soldering Steps
 The following instructions will give a written description of the circuit diagram. If you are familiar with electronics, feel free to just solder the circuit diagram. 
 
-1. Mount the barrel connector in the top left corner of the PCB and solder in a 1000 Ohm resistor between the power and ground sides. This creates a power port, where the pin at the back of the barrel connector is your +5V pin, and the pin closer to the opening is the ground (see below).
+1. Mount the barrel connector in the top left corner of the PCB. This creates a power port, where the pin at the back of the barrel connector is your +5V pin, and the pin closer to the opening is the ground (see below).
 <img src="https://github.com/user-attachments/assets/54123e2e-5e5e-465c-873b-4c60afbe5cbc" width = "250" height = "200">
    
-2. The RPi ground pin wire can be a bare wire or a wire with an open pin. Solder in one end of the wire in series between the ground of the barrel connector and the 1K Ohm resistor (See diagram). The other end will be connected to the RPi Grove Shield in a later step.
+2. The RPi ground pin wire can be a bare wire or a wire with an open pin. Solder in one end of the wire in series between the ground of the barrel connector and the rest of the circuit. The other end of the wire will be connected to the RPi Grove Shield in a later step.
 
-3. For the NPN transistor, the drawing below shows the schematic (with the trapezoidal piece that protrudes facing towards you). Pin 1 (base) goes to the 390 Ohm resistor and RPi GPIO pin.  Pin 2 (collector) goes to the ground terminal of the fans and Pin 3 (emitter) goes to the ground of the power supply.\
-![transistor numbering](https://github.com/user-attachments/assets/b119d60f-0305-4107-8f57-50d115634337)
+3. For the MOSFET transistor, the drawing below shows the schematic of the transistor and identifies the pins. Pin 1 (gate) goes to the 390 Ohm resistor and RPi GPIO pin 0. Pin 2 (drain) goes to the ground terminal of the fans and Pin 3 (source) goes to the ground of the power supply.\
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/d5ecf38e-9d96-4579-947a-8944198b237d"> <br>
+_Image credits to components.com_
+
 
 4. At pin 1, solder a 390 Ohm resistor and one end of the GPIO pin wire (bare or with open pin), like the ground pin wire.
    
-6. At pin 2, solder in one end of a black wire. This will be connected to the ground wires of the fan. Repeat the same for a red wire that is connected to a 5.6 Ohm resistor (see diagram).
+5. At pin 2, solder in one end of a black wire. This will be connected to the ground wires of the fan. Repeat the same for a red wire for the +5V to the fans (see diagram).
    
-8. Both the fan wires will be connected to a diode. Orient the diode so the silver bar (which indiciates the cathode) points towards the +5V terminal of the fan (the red wire). The diode is used to protect the circuit from the reverse flow of voltage after the fan is turned off, as rotational motors create a magnetic and energetic field which can flow in the opposite direction of the current, damaging the circuit. This way, it will flow back into the fan, using up the energy.
+6. Both the fan wires will be connected to a diode. Orient the diode so the silver bar (which indiciates the cathode) points towards the +5V terminal of the fan (the red wire). The diode is used to protect the circuit from the reverse flow of voltage after the fan is turned off, as rotational motors create a magnetic and energetic field which can flow in the opposite direction of the current, damaging the circuit. This way, it will flow back into the fan, using up the energy.
 
+7. Wire a 10K Ohm resistor parallel to the ground side of the of the power supply and the 390 Ohm resistor at the transistor pin 1 (see diagram).
 
 ## 3b: Connecting PCB to Fans
 1. Place the fans into the square slots in the base piece of the casing. Thread the wires through the hole at the bottom of each slot and collect the wires of the fans in the row at one end of the case.
@@ -127,8 +131,11 @@ The last step to setting up is connecting the GPIO wires to the Raspberry Pi. Th
 2. Connect the RPi GPIO Pin 0 wire to the "GP0" slot on the RPi Grove shield. If using the electronic casing, thread the wire through one of the honeycombs in the side panel.
 3. Connect the RPi Ground Pin wire to any slot that says "GND" on the RPi Grove shield.
 
-#### Image of Soldered Circuit + RPi
-<img src="https://github.com/user-attachments/assets/ffd1aeaa-bdd7-4fed-9f0c-01aae3cf2324" width = "500" height = "286">
+#### Image of the Soldered Circuit
+<!-- <img src="https://github.com/user-attachments/assets/ffd1aeaa-bdd7-4fed-9f0c-01aae3cf2324" width = "500" height = "286"> -->
+The white and green wires go into the RPi GPio pins 1 and 0 respectively, while the red and black go to the fans.
+<img src="https://github.com/user-attachments/assets/7f01253b-c5b1-4f49-be92-1f114f8cd44f" width = "500">
+
 
 ## 3d: Assemble Electronics Casing (Optional)
 Finally, insert the side panels into the side module and put on the lids to complete the assembly of the electronics.
